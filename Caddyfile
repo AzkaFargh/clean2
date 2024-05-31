@@ -1,3 +1,6 @@
-http://103.10.104.2 {
-    reverse_proxy localhost:8000
+melon.apps.cs.ipb.ac.id {
+    reverse_proxy 127.0.0.1:8000
+    log {
+        output file /var/log/caddy/access.log
+    }
 }
