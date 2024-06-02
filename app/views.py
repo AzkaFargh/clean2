@@ -12,7 +12,7 @@ db_config = {
     'password': 'admin',
     'host': 'localhost',
     'database': 'db_melon',
-    'port': '5000_mysql'  # Pastikan port disesuaikan dengan port MySQL yang digunakan
+    'port': '5000'  # Pastikan port disesuaikan dengan port MySQL yang digunakan
 }
 
 def connect_to_database():
