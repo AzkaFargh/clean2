@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn.utils.validation")
 db_config = {
     'user': 'root',
-    'password': 'admin',
+    'password': 'azkafarghani',
     'host': 'localhost',
     'database': 'db_melon',
     'port': '3306'  
