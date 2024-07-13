@@ -1,7 +1,7 @@
 import os
 import datetime
 import logging
-from flask import Flask
+from flask import Flask, request, jsonify
 import mysql.connector
 from app.views import *
 from app.prediction import *
