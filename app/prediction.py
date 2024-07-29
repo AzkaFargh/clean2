@@ -48,7 +48,6 @@ def extract_glcm_features(image_path):
 
 def extract_jala_features(image_path):
     image = cv2.imread(image_path)
-
     # Convert the image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # Apply Gaussian blur

@@ -1,15 +1,14 @@
 import os
 import datetime
 import logging
-from flask import Flask
+from flask import Flask, request, jsonify
 import mysql.connector
-from app.views import *
 from app.prediction import *
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn.utils.validation")
 db_config = {
     'user': 'root',
-    'password': 'azkafarghani',
+    'password': 'admin',
     'host': 'localhost',
     'database': 'db_melon',
     'port': '3306'  
@@ -26,8 +25,8 @@ def connect_to_database():
     
 app = Flask(__name__)
 app.config['uploads'] = os.path.join(os.getcwd(), 'uploads')
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 #batasan size file
 
-db = connect_to_database()
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
 def insert_image_info(filename, longitude, latitude):
@@ -47,7 +46,7 @@ def insert_image_info(filename, longitude, latitude):
             return False
     else:
         return False
-    
+
 @app.route('/upload', methods=['POST'])
 def upload_image():
     print("Request files:", request.files)  # Debugging statement
@@ -59,6 +58,9 @@ def upload_image():
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
+    
+    if file.mimetype not in ['image/png', 'image/jpeg', 'image/jpg']:
+        return jsonify({'error': 'Invalid file type'}), 400
     
     try:
         if not os.path.exists(app.config['uploads']):
@@ -83,14 +85,6 @@ def upload_image():
         return jsonify({'error': str(e)}), 500
 
     
-def label_prediction(prediction):
-    if prediction == 1:
-        return 'Belum matang'
-    elif prediction == 0:
-        return 'Siap panen'
-    else:
-        return 'Tidak Dapat diprediksi'
-    
 def get_last_uploaded_image():
     conn = connect_to_database()
     if conn:
@@ -109,8 +103,6 @@ def get_last_uploaded_image():
             return None
     else:
         return None
-
-import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s')
@@ -144,7 +136,7 @@ def predict():
             prediction_label_svm = "Belum matang" if prediction_svm == 1 else "Siap panen"
             prediction_label_rf = "Belum matang" if prediction_rf == 1 else "Siap panen"
             
-            # Mengonversi DataFrame ke kamus tanpa menggunakan indeks sebagai kunci
+            # Mengonversi DataFrame ke dictionary
             combined_features_dict = combined_features.to_dict(orient='records')[0]
             normalized_features_dict = normalized_features.to_dict(orient='records')[0]
             
@@ -200,6 +192,5 @@ def predict():
     
 
 
-
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(debug=True, host='0.0.0.0', port=8080)

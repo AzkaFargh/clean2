@@ -1,0 +1,28 @@
+// Pre-request Script untuk POST /upload
+pm.environment.set("uploadStartTime", new Date().getTime());
+
+// Test Script untuk POST /upload
+pm.environment.set("uploadEndTime", new Date().getTime());
+
+// Pre-request Script untuk GET /predict
+pm.environment.set("predictStartTime", new Date().getTime());
+
+// Test Script untuk GET /predict
+var uploadEndTime = pm.environment.get("uploadEndTime");
+var predictEndTime = new Date().getTime();
+var uploadTime = uploadEndTime - pm.environment.get("uploadStartTime");
+var predictTime = predictEndTime - pm.environment.get("predictStartTime");
+var totalTime = predictEndTime - pm.environment.get("uploadStartTime");
+
+pm.environment.set("uploadTime", uploadTime);
+pm.environment.set("predictTime", predictTime);
+pm.environment.set("totalTime", totalTime);
+
+console.log("Upload Time: " + uploadTime + " ms");
+console.log("Predict Time: " + predictTime + " ms");
+console.log("Total Time: " + totalTime + " ms");
+
+
+
+
+

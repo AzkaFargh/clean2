@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
---
+-- ini biar commit
 -- Struktur dari tabel `images`
 --
 
