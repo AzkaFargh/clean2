@@ -6,6 +6,7 @@ import mysql.connector
 from app.prediction import *
 import warnings
 from PIL import Image
+import io
 
 warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn.utils.validation")
 db_config = {
