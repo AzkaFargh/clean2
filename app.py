@@ -5,6 +5,8 @@ from flask import Flask, request, jsonify
 import mysql.connector
 from app.prediction import *
 import warnings
+from PIL import Image
+
 warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn.utils.validation")
 db_config = {
     'user': 'root',
@@ -62,6 +64,10 @@ def upload_image():
     if file.mimetype not in ['image/png', 'image/jpeg', 'image/jpg']:
         return jsonify({'error': 'Invalid file type'}), 400
     
+    image = Image.open(io.BytesIO(file.read()))
+    width, height = image.size
+    print(f"Image size: {width} x {height} pixels") 
+
     try:
         if not os.path.exists(app.config['uploads']):
             os.makedirs(app.config['uploads'])
