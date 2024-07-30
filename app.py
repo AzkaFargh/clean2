@@ -63,7 +63,7 @@ def upload_image():
         return jsonify({'error': 'No selected file'}), 400
     
     if file.mimetype not in ['image/png', 'image/jpeg', 'image/jpg']:
-        return jsonify({'error': 'Invalid file type'}), 400
+        return jsonify({'error': 'Invalid file type'}), 415
     
     image = Image.open(io.BytesIO(file.read()))
     width, height = image.size
@@ -85,7 +85,7 @@ def upload_image():
 
         # Simpan informasi gambar ke dalam database
         if insert_image_info(file.filename, longitude, latitude):
-            return jsonify({'message': 'Image uploaded successfully'}), 200
+            return jsonify({'message': 'Image uploaded successfully'}), 201
         else:
             return jsonify({'error': 'Failed to insert image information to database'}), 500
     except Exception as e:
